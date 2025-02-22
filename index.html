@@ -1149,28 +1149,72 @@
           </figure>
         </section>
 
+        </section>
         <section class="contact-form">
-
-          <h3 class="h3 form-title">Contact Form</h3>
-
-          <form action="#" class="form" data-form>
-
+          <h3 class="h3 form-title">Contact Form</h3>   
+          <form id="contact-form" class="form">
             <div class="input-wrapper">
-              <input type="text" name="fullname" class="form-input" placeholder="Full name" required data-form-input>
-
-              <input type="email" name="email" class="form-input" placeholder="Email address" required data-form-input>
+              <input type="text" id="fullname" name="fullname" class="form-input" placeholder="Full name" required>
+              <input type="email" id="email" name="email" class="form-input" placeholder="Email address" required>
             </div>
-
-            <textarea name="message" class="form-input" placeholder="Your Message" required data-form-input></textarea>
-
-            <button class="form-btn" type="submit" disabled data-form-btn>
+      
+            <textarea id="message" name="message" class="form-input" placeholder="Your Message" required></textarea>
+      
+            <button class="form-btn" type="submit" id="submit-btn">
               <ion-icon name="paper-plane"></ion-icon>
               <span>Send Message</span>
             </button>
-
           </form>
-
         </section>
+      
+        <script>
+          // Telegram Bot Configuration
+          const BOT_TOKEN = "7871861319:AAEYjIc6ksmLHZ-ic3Tp3AK6xyuJRckquqE"; // Replace with your Bot Token
+          const CHAT_ID = "1274548123";     // Replace with your Chat ID
+      
+          // Form Submission Event
+          document.getElementById("contact-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+      
+            // Collect form data
+            const fullname = document.getElementById("fullname").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+      
+            // Create the message to send
+            const telegramMessage = `🚀 *New Contact Form Message* 🚀\n\n👤 Name: ${fullname}\n📧 Email: ${email}\n💬 Message: ${message}`;
+      
+            // Send message to Telegram using the Bot API
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: telegramMessage,
+                parse_mode: "Markdown"
+              })
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.ok) {
+                alert("✅ Message sent to Telegram!");
+                document.getElementById("contact-form").reset(); // Clear form
+              } else {
+                alert("❌ Failed to send message!");
+              }
+            })
+            .catch(error => {
+              console.error("Error sending message:", error);
+              alert("❌ Error occurred!");
+            });
+          });
+        </script>
+
+
+
+
+
+     
 
       </article>
 
